@@ -1,0 +1,422 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500&display=swap');
+
+@layer base {
+  :root {
+    --background: #F0F4F8;
+    --foreground: #1A202C;
+    --border: #E2E8F0;
+    --ring: #00A896;
+    --radius: 0.625rem;
+  }
+  * {
+    box-sizing: border-box;
+  }
+  body {
+    font-family: 'Inter', system-ui, sans-serif;
+    background: var(--background);
+    color: var(--foreground);
+  }
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: #CBD5E0; border-radius: 3px; }
+
+  input, textarea, select {
+    width: 100%;
+    background: #FFFFFF;
+    border: 1px solid #E2E8F0;
+    color: #1A202C;
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-family: 'Inter', sans-serif;
+    font-size: 13.5px;
+    outline: none;
+    transition: border-color 0.15s, box-shadow 0.15s;
+    resize: vertical;
+    box-sizing: border-box;
+  }
+  input:focus, textarea:focus, select:focus {
+    border-color: #00A896;
+    box-shadow: 0 0 0 3px rgba(0,168,150,0.12);
+  }
+  input::placeholder, textarea::placeholder {
+    color: #CBD5E0;
+  }
+}
+
+@layer utilities {
+  .num {
+    font-family: 'IBM Plex Mono', 'Courier New', monospace;
+  }
+  .fadeUp {
+    animation: fadeUp 0.28s ease forwards;
+  }
+}
+
+@layer components {
+  .nav-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 9px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.15s;
+    font-size: 13px;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.6);
+    border: 1px solid transparent;
+    user-select: none;
+    letter-spacing: 0.01em;
+  }
+  .nav-item:hover {
+    background: rgba(255, 255, 255, 0.08);
+    color: rgba(255, 255, 255, 0.9);
+  }
+  .nav-item.active {
+    background: rgba(0, 168, 150, 0.2);
+    color: #00A896;
+    border-color: rgba(0, 168, 150, 0.3);
+  }
+  .chip {
+    padding: 5px 12px;
+    border-radius: 6px;
+    border: 1px solid #E2E8F0;
+    background: #F7FAFC;
+    color: #718096;
+    cursor: pointer;
+    font-size: 12.5px;
+    transition: all 0.13s;
+    font-family: 'Inter', sans-serif;
+    white-space: nowrap;
+    user-select: none;
+    font-weight: 500;
+  }
+  .chip:hover {
+    border-color: rgba(0, 168, 150, 0.45);
+    color: #00A896;
+    background: rgba(0, 168, 150, 0.06);
+  }
+  .chip.sel {
+    border-color: #00A896;
+    color: #00A896;
+    background: rgba(0, 168, 150, 0.1);
+    font-weight: 600;
+  }
+  .chip.danger:hover,
+  .chip.danger.sel {
+    border-color: rgba(229, 62, 62, 0.45);
+    color: #E53E3E;
+    background: rgba(229, 62, 62, 0.07);
+  }
+  .card {
+    background: #FFFFFF;
+    border: 1px solid #E2E8F0;
+    border-radius: 12px;
+    padding: 22px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.04);
+  }
+  .quick-card {
+    background: #FFFFFF;
+    border: 1px solid #E2E8F0;
+    border-radius: 12px;
+    padding: 18px 20px;
+    cursor: pointer;
+    transition: all 0.18s;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+  }
+  .quick-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    border-color: #CBD5E0;
+  }
+  .btn {
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.18s;
+    font-family: 'Inter', sans-serif;
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    letter-spacing: 0.01em;
+  }
+  .btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+    transform: none !important;
+    box-shadow: none !important;
+  }
+  .btn-teal {
+    background: #00A896;
+    color: #fff;
+    box-shadow: 0 2px 6px rgba(0, 168, 150, 0.3);
+  }
+  .btn-teal:hover:not(:disabled) {
+    background: #008F7E;
+    transform: translateY(-1px);
+    box-shadow: 0 5px 14px rgba(0, 168, 150, 0.35);
+  }
+  .btn-red {
+    background: #E53E3E;
+    color: #fff;
+    box-shadow: 0 2px 6px rgba(229, 62, 62, 0.25);
+  }
+  .btn-red:hover:not(:disabled) {
+    background: #C53030;
+    transform: translateY(-1px);
+    box-shadow: 0 5px 14px rgba(229, 62, 62, 0.3);
+  }
+  .btn-ghost {
+    background: transparent;
+    color: #00A896;
+    border: 1.5px solid rgba(0, 168, 150, 0.4);
+  }
+  .btn-ghost:hover:not(:disabled) {
+    background: rgba(0, 168, 150, 0.08);
+    border-color: #00A896;
+  }
+  .label {
+    font-size: 10.5px;
+    color: #718096;
+    text-transform: uppercase;
+    letter-spacing: 1.3px;
+    margin-bottom: 8px;
+    display: block;
+    font-weight: 600;
+  }
+  .section-label {
+    font-size: 10.5px;
+    font-weight: 700;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+    display: block;
+  }
+  .spinner {
+    width: 32px;
+    height: 32px;
+    border: 2.5px solid #E2E8F0;
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+    margin: 0 auto 14px;
+  }
+}
+
+/* ── Scroll Snap horizontal (sidebar-panel e chips-scroll) ── */
+@media (max-width: 768px) {
+  .sidebar-panel,
+  .chips-scroll,
+  .grid-5col {
+    scroll-snap-type: x proximity;
+  }
+  .sidebar-panel > *,
+  .chips-scroll > *,
+  .grid-5col > * {
+    scroll-snap-align: start;
+    scroll-margin-left: 8px;
+  }
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.35; }
+}
+
+/* ── Sidebar responsivo ──────────────────────────────── */
+.sidebar {
+  transition: transform 0.28s cubic-bezier(0.4, 0, 0.2, 1),
+              width 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ── Hamburger button ────────────────────────────────── */
+.hamburger {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  cursor: pointer;
+  background: transparent;
+  border: none;
+  padding: 6px;
+  transition: background 0.18s;
+  flex-shrink: 0;
+}
+.hamburger:hover { background: rgba(0,168,150,0.08); }
+.hamburger-bar {
+  display: block;
+  width: 20px;
+  height: 2px;
+  border-radius: 2px;
+  background: #1A202C;
+  transition: transform 0.25s cubic-bezier(0.4,0,0.2,1),
+              opacity 0.2s ease,
+              width 0.25s ease;
+  transform-origin: center;
+}
+.hamburger.open .hamburger-bar:nth-child(1) {
+  transform: translateY(7px) rotate(45deg);
+}
+.hamburger.open .hamburger-bar:nth-child(2) {
+  opacity: 0;
+  width: 0;
+}
+.hamburger.open .hamburger-bar:nth-child(3) {
+  transform: translateY(-7px) rotate(-45deg);
+}
+
+/* ── Overlay mobile ──────────────────────────────────── */
+.sidebar-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(8,29,62,0.45);
+  z-index: 40;
+  backdrop-filter: blur(2px);
+  animation: fadeIn 0.22s ease;
+}
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* ── Badge: esconde label em telas ≤ 640px ───────────── */
+@media (max-width: 640px) {
+  .status-label {
+    display: none;
+  }
+  .status-badge-pill {
+    min-height: 26px;
+  }
+}
+
+/* ── Telas muito pequenas (≤ 370px) ─────────────────── */
+@media (max-width: 370px) {
+  .status-badge-pill {
+    min-height: 26px;
+  }
+}
+
+/* ── Mobile (≤ 768px) ────────────────────────────────── */
+@media (max-width: 768px) {
+  /* Nav sidebar */
+  .sidebar {
+    position: fixed !important;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    z-index: 50;
+    transform: translateX(-100%);
+  }
+  .sidebar.sidebar-open {
+    transform: translateX(0);
+  }
+  .sidebar-overlay.visible {
+    display: block;
+  }
+  .dashboard-content {
+    margin-left: 0 !important;
+  }
+  .main-content {
+    padding: 16px !important;
+  }
+
+  /* ── Layout de 2 colunas → coluna única ── */
+  .two-col-layout {
+    flex-direction: column !important;
+    height: auto !important;
+    overflow: visible !important;
+    flex: unset !important;  /* remove flex:1 que conflita com height:auto no pai */
+  }
+
+  /* ── Seções com split-pane: altura livre no mobile ── */
+  .section-split {
+    height: auto !important;
+  }
+
+  /* ── Painel lateral → scroll horizontal ── */
+  .sidebar-panel {
+    width: 100% !important;
+    min-width: unset !important;
+    flex-direction: row !important;
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+    padding-bottom: 6px;
+    scrollbar-width: thin;
+  }
+  .sidebar-panel > * {
+    flex-shrink: 0;
+    min-width: 150px;
+  }
+
+  /* ── Painel de conteúdo → largura total ── */
+  .content-panel {
+    flex: unset !important;
+    width: 100% !important;
+    overflow-y: visible !important;
+  }
+
+  /* ── Chips de filtro → scroll horizontal ── */
+  .chips-scroll {
+    flex-wrap: nowrap !important;
+    overflow-x: auto !important;
+    padding-bottom: 4px;
+    scrollbar-width: thin;
+    flex-shrink: 0;        /* nunca comprime a linha de chips */
+  }
+  .chips-scroll > * {
+    flex-shrink: 0;
+  }
+
+  /* ── Grid 2 colunas → coluna única ── */
+  .grid-2col {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* ── Grid 5 colunas → scroll horizontal ── */
+  .grid-5col {
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    overflow-x: auto !important;
+    padding-bottom: 4px;
+    scrollbar-width: thin;
+  }
+  .grid-5col > * {
+    flex-shrink: 0;
+    min-width: 120px;
+  }
+}
+
+/* ── Desktop (> 768px) ───────────────────────────────── */
+@media (min-width: 769px) {
+  .hamburger {
+    display: none;
+  }
+  .sidebar-panel {
+    padding-right: 6px;
+    margin-right: 10px;
+  }
+  .content-panel {
+    padding-right: 6px;
+  }
+}
