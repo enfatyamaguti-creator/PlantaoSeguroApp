@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { C } from '@/lib/constants/colors';
 import Loader from '@/components/shared/Loader';
 import ErrorBox from '@/components/shared/ErrorBox';
+import { callAI } from '@/lib/api';
 
 const SECTORS = ['UTI Adulto', 'Pronto-Socorro', 'Clínica Médica', 'Clínica Cirúrgica', 'Oncologia'];
 const NEUROS = ['Sedado profundo / RASS -3 a -4', 'Sedação leve / RASS -1 a -2', 'Acordado e orientado (A+O3)', 'Rebaixado / desorientado', 'Agitado psicomotor'];
@@ -25,12 +26,8 @@ export default function EvolucaoSection() {
   async function generate() {
     setLoading(true); setResult(''); setErr(null);
     try {
-      const r = await fetch('/api/claude', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          system: 'Você é enfermeira supervisora de UTI. Gere evoluções de enfermagem profissionais, técnicas e objetivas. REGRA ABSOLUTA: nunca invente ou estime valores numéricos (PA, FC, FR, SpO2, temperatura, glicemia, escalas, etc.) que não foram fornecidos. Quando um dado não foi informado, use ____ como placeholder para o enfermeiro preencher.',
-          prompt: `Gere uma evolução de enfermagem profissional para SAE. Linguagem técnica de UTI. 1ª pessoa do plural. Máximo 200 palavras. Texto corrido sem tópicos.
+      const text = await callAI(
+        `Gere uma evolução de enfermagem profissional para SAE. Linguagem técnica de UTI. 1ª pessoa do plural. Máximo 200 palavras. Texto corrido sem tópicos.
 
 Setor: ${sector || 'UTI Adulto'}
 Estado neurológico: ${neuro || 'não informado'}
@@ -39,13 +36,10 @@ Dispositivos: ${devices.length ? devices.join(', ') : 'nenhum'}
 ${extra ? `Dados adicionais: ${extra}` : ''}
 
 IMPORTANTE: Para qualquer valor numérico (sinais vitais, escalas, exames) não informado acima, escreva ____ no texto para o enfermeiro preencher.`,
-          maxTokens: 2000,
-        }),
-      });
-      if (!r.ok) throw new Error(`HTTP ${r.status}`);
-      const d = await r.json();
-      if (d.error) throw new Error(d.error);
-      setResult(typeof d.result === 'string' ? d.result : '');
+        2000,
+        'Você é enfermeira supervisora de UTI. Gere evoluções de enfermagem profissionais, técnicas e objetivas. REGRA ABSOLUTA: nunca invente ou estime valores numéricos (PA, FC, FR, SpO2, temperatura, glicemia, escalas, etc.) que não foram fornecidos. Quando um dado não foi informado, use ____ como placeholder para o enfermeiro preencher.'
+      );
+      setResult(typeof text === 'string' ? text : '');
     } catch (e: unknown) { setErr(`Erro: ${e instanceof Error ? e.message : String(e)}`); }
     finally { setLoading(false); }
   }

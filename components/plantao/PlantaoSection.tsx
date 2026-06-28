@@ -3,18 +3,7 @@ import { useState } from 'react';
 import { C } from '@/lib/constants/colors';
 import Loader from '@/components/shared/Loader';
 import ErrorBox from '@/components/shared/ErrorBox';
-
-async function callClaude(prompt: string, maxTokens = 2000) {
-  const r = await fetch('/api/claude', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ prompt, maxTokens }),
-  });
-  if (!r.ok) throw new Error(`HTTP ${r.status}`);
-  const d = await r.json();
-  if (d.error) throw new Error(d.error);
-  return d.result;
-}
+import { callAI } from '@/lib/api';
 
 const SITS = [
   '🧠 Rebaixamento do nível de consciência',
@@ -41,14 +30,14 @@ export default function PlantaoSection() {
   async function assess() {
     setLoading(true); setResult(null); setErr(null);
     try {
-      const r = await callClaude(
+      const r = await callAI(
         `Situacao clinica: ${sit}${ctx ? `. Contexto: ${ctx}` : ''}
 
 JSON (sem aspas duplas nos valores, sem quebras de linha):
 {"situacao":"descricao","prioridade":"imediata|alta|media","riscoIminente":true,"mensagemRapida":"frase direta","primeirosPasso":["p1","p2","p3","p4"],"oQueAvaliar":["a1","a2","a3"],"oQueMonitorar":["m1","m2","m3"],"sinaisDeAlerta":["s1","s2","s3"],"quandoEscalar":"orientacao"}`,
         2000
       );
-      setResult(r);
+      setResult(r as Record<string, unknown>);
     } catch(e: unknown) { setErr(`Erro: ${e instanceof Error ? e.message : String(e)}`); }
     finally { setLoading(false); }
   }

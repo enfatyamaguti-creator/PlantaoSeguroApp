@@ -2,24 +2,13 @@
 import { useState } from 'react';
 import { C } from '@/lib/constants/colors';
 import { HMG_FIELDS } from '@/lib/constants/exames';
+import { callAI } from '@/lib/api';
 
 interface HemogramaFormProps {
   onResult: (r: unknown) => void;
   onError: (msg: string | null) => void;
   loading: boolean;
   setLoading: (v: boolean) => void;
-}
-
-async function callClaude(prompt: string, maxTokens = 2000) {
-  const r = await fetch('/api/claude', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ prompt, maxTokens }),
-  });
-  if (!r.ok) throw new Error(`HTTP ${r.status}`);
-  const d = await r.json();
-  if (d.error) throw new Error(d.error);
-  return d.result;
 }
 
 export default function HemogramaForm({ onResult, onError, loading, setLoading }: HemogramaFormProps) {
@@ -37,7 +26,7 @@ export default function HemogramaForm({ onResult, onError, loading, setLoading }
     if (!filled) { onError('Preencha pelo menos um parâmetro do hemograma.'); return; }
     setLoading(true); onResult(null); onError(null);
     try {
-      const r = await callClaude(
+      const r = await callAI(
         `Hemograma. Sexo: ${sex === 'M' ? 'M' : 'F'}. Dados: ${filled}.${ctx ? ` Contexto: ${ctx}` : ''}
 
 JSON (sem aspas duplas nos valores, sem quebras de linha):

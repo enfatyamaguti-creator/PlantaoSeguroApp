@@ -6,18 +6,7 @@ import Loader from '@/components/shared/Loader';
 import ErrorBox from '@/components/shared/ErrorBox';
 import HemogramaForm from './HemogramaForm';
 import HemogramaResult from './HemogramaResult';
-
-async function callClaude(prompt: string, maxTokens = 2000) {
-  const r = await fetch('/api/claude', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ prompt, maxTokens }),
-  });
-  if (!r.ok) throw new Error(`HTTP ${r.status}`);
-  const d = await r.json();
-  if (d.error) throw new Error(d.error);
-  return d.result;
-}
+import { callAI } from '@/lib/api';
 
 const COMMON = ['Potássio (K+)', 'Sódio (Na+)', 'Hemoglobina', 'Gasometria arterial', 'Creatinina', 'Lactato', 'Glicemia', 'Plaquetas', 'PCR', 'INR', 'Ureia', 'TGO/TGP'];
 
@@ -34,7 +23,7 @@ export default function ExamesSection() {
   async function interpret() {
     setLoading(true); setResult(null); setErr(null);
     try {
-      const r = await callClaude(
+      const r = await callAI(
         `Exame: ${exam}${val ? `. Valor: ${val}` : ''}${ctx ? `. Contexto: ${ctx}` : ''}
 
 Retorne JSON com estes campos (sem aspas duplas dentro dos valores, sem quebras de linha):
@@ -43,7 +32,7 @@ Retorne JSON com estes campos (sem aspas duplas dentro dos valores, sem quebras 
 REGRA: se o valor do exame não foi informado, mantenha '____' no campo valorEncontrado. Nunca invente ou estime valores numéricos não fornecidos.`,
         2000
       );
-      setResult(r);
+      setResult(r as Record<string, unknown>);
     } catch(e: unknown) {
       setErr(`Erro ao interpretar: ${e instanceof Error ? e.message : String(e)}. Tente novamente.`);
     } finally { setLoading(false); }

@@ -2,6 +2,9 @@
 import { useState } from 'react';
 import { C } from '@/lib/constants/colors';
 import { ANOT_TIPOS, ANOT_TURNOS, ANOT_SETORES, ANOT_EXTRAS } from '@/lib/constants/anotacao';
+import Loader from '@/components/shared/Loader';
+import ErrorBox from '@/components/shared/ErrorBox';
+import { callAI } from '@/lib/api';
 
 export default function AnotacaoSection() {
   const [tipo, setTipo] = useState<string | null>(null);
@@ -38,21 +41,14 @@ export default function AnotacaoSection() {
         .map(c => `${c.label}: ${extras[c.key]}`)
         .join('\n');
 
-      const resp = await fetch('/api/claude', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          system: 'Você é enfermeira supervisora de UTI com vasta experiência em documentação de enfermagem. Gere anotações de enfermagem profissionais, objetivas, em linguagem técnica, em 3ª pessoa do singular, sem bullet points, texto corrido. Siga as normas do COFEN. REGRA ABSOLUTA: nunca invente valores numéricos (PA, FC, FR, SpO2, temperatura, glicemia, escalas) que não foram fornecidos — use ____ como placeholder.',
-          prompt: `Gere uma anotação de enfermagem profissional.\n\nTipo: ${tipoSel?.label}\nSetor: ${setor}\nTurno: ${turno || 'não informado'}\n${paciente ? `Identificação: ${paciente}${leito ? `, Leito ${leito}` : ''}` : ''}\n${camposTexto}\n${contexto ? `Contexto adicional: ${contexto}` : ''}\n\nRequisitos:\n- Linguagem técnica de enfermagem hospitalar\n- 3ª pessoa do singular (ex: "Paciente apresentou...", "Realizado...", "Comunicado ao...")\n- Máximo 120 palavras\n- Texto corrido, sem tópicos ou bullets\n- Incluir horário se relevante (usar __HORÁRIO__ como placeholder)\n- Para qualquer valor numérico não informado (sinais vitais, escalas, exames), usar ____ para o enfermeiro preencher\n- Finalizar com assinatura padrão: "Enfermeiro(a) responsável."\n- Seguir normas COFEN de documentação`,
-          maxTokens: 2000,
-        }),
-      });
-      if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
-      const data = await resp.json();
-      if (data.error) throw new Error(data.error);
-      const text = typeof data.result === 'string' ? data.result : '';
-      setResult(text);
-      setEditText(text);
+      const text = await callAI(
+        `Gere uma anotação de enfermagem profissional.\n\nTipo: ${tipoSel?.label}\nSetor: ${setor}\nTurno: ${turno || 'não informado'}\n${paciente ? `Identificação: ${paciente}${leito ? `, Leito ${leito}` : ''}` : ''}\n${camposTexto}\n${contexto ? `Contexto adicional: ${contexto}` : ''}\n\nRequisitos:\n- Linguagem técnica de enfermagem hospitalar\n- 3ª pessoa do singular (ex: "Paciente apresentou...", "Realizado...", "Comunicado ao...")\n- Máximo 120 palavras\n- Texto corrido, sem tópicos ou bullets\n- Incluir horário se relevante (usar __HORÁRIO__ como placeholder)\n- Para qualquer valor numérico não informado (sinais vitais, escalas, exames), usar ____ para o enfermeiro preencher\n- Finalizar com assinatura padrão: "Enfermeiro(a) responsável."\n- Seguir normas COFEN de documentação`,
+        2000,
+        'Você é enfermeira supervisora de UTI com vasta experiência em documentação de enfermagem. Gere anotações de enfermagem profissionais, objetivas, em linguagem técnica, em 3ª pessoa do singular, sem bullet points, texto corrido. Siga as normas do COFEN. REGRA ABSOLUTA: nunca invente valores numéricos (PA, FC, FR, SpO2, temperatura, glicemia, escalas) que não foram fornecidos — use ____ como placeholder.'
+      );
+      const str = typeof text === 'string' ? text : '';
+      setResult(str);
+      setEditText(str);
     } catch(e: unknown) { setErr(`Erro: ${e instanceof Error ? e.message : String(e)}`); }
     finally { setLoading(false); }
   }
@@ -170,15 +166,8 @@ export default function AnotacaoSection() {
             </div>
           </div>
 
-          {err && <div style={{ background:C.dangerGlow, border:`1px solid ${C.danger}40`, borderRadius:10, padding:14, color:C.danger, fontSize:13.5 }}>{err}</div>}
-
-          {loading && (
-            <div className="card fadeUp" style={{ textAlign:'center', padding:44 }}>
-              <div className="spinner" style={{ borderTopColor:C.accent }} />
-              <div style={{ color:C.muted, fontSize:13.5 }}>Gerando anotação de enfermagem...</div>
-              <div style={{ color:C.dim, fontSize:12, marginTop:4 }}>Linguagem técnica · Normas COFEN</div>
-            </div>
-          )}
+          {err && <ErrorBox msg={err} />}
+          {loading && <Loader msg="Gerando anotação de enfermagem..." subMsg="Linguagem técnica · Normas COFEN" />}
 
           {result && !loading && (
             <div className="card fadeUp" style={{ borderColor:`${tipoSel?.color}30` }}>
