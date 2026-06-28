@@ -2,6 +2,9 @@
 import { useState } from 'react';
 import { C } from '@/lib/constants/colors';
 import { SAE_SIGNS, SAE_SETORES } from '@/lib/constants/sae';
+import Loader from '@/components/shared/Loader';
+import ErrorBox from '@/components/shared/ErrorBox';
+import { callAI } from '@/lib/api';
 
 interface SAEResult {
   resumoClinico?: string;
@@ -54,22 +57,14 @@ export default function SAESection() {
   async function generateSAE() {
     setLoading(true); setResult(null); setErr(null);
     try {
-      const resp = await fetch('/api/claude', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          system: 'Você é especialista em SAE de enfermagem (NANDA/NIC/NOC) com foco em UTI adulto. REGRA ABSOLUTA: responda APENAS com JSON puro e válido. Nunca use aspas duplas dentro de valores de string — use aspas simples ou reescreva. Nunca insira quebras de linha dentro de valores de string. Zero markdown. Zero texto fora do JSON. NUNCA invente valores numéricos de escalas (RASS, Braden, CPOT, CAM-ICU, Glasgow, etc.) ou exames laboratoriais que não foram fornecidos — use ____ como placeholder.',
-          prompt: `Setor: ${setor}\nDados clínicos: ${signs.join('; ')}\n${ctx ? `Contexto: ${ctx}` : ''}\n\nRetorne JSON com esta estrutura exata. Máximo 2 diagnósticos, 3 intervenções, 2 resultados. Todos os valores de string sem aspas duplas internas e sem quebras de linha:\n\n{"resumoClinico":"frase1. frase2","alertasPrioritarios":["alerta1","alerta2","alerta3"],"diagnosticos":[{"nanda":"nome NANDA","codigo":"00XXX","dominio":"nome dominio","classe":"nome classe","prioridade":"alta","relacionadoA":["fator1","fator2"],"evidenciadoPor":["evidencia1","evidencia2"],"justificativaClinica":"justificativa em uma frase"}],"intervencoes":[{"nic":"nome NIC","codigo":"XXXX","diagRelacionado":"nome do diagnostico relacionado","atividades":["atividade1","atividade2","atividade3"]}],"resultados":[{"noc":"nome NOC","codigo":"XXXX","diagRelacionado":"nome do diagnostico","indicadores":["indicador1","indicador2"],"metaEsperada":"meta em uma frase"}],"evolucaoSugerida":"texto de evolucao em uma frase longa sem quebras de linha","dicaDaSupervisora":"dica pratica em uma frase"}`,
-          maxTokens: 8000,
-        }),
-      });
+      const data = await callAI(
+        `Setor: ${setor}\nDados clínicos: ${signs.join('; ')}\n${ctx ? `Contexto: ${ctx}` : ''}\n\nRetorne JSON com esta estrutura exata. Máximo 2 diagnósticos, 3 intervenções, 2 resultados. Todos os valores de string sem aspas duplas internas e sem quebras de linha:\n\n{"resumoClinico":"frase1. frase2","alertasPrioritarios":["alerta1","alerta2","alerta3"],"diagnosticos":[{"nanda":"nome NANDA","codigo":"00XXX","dominio":"nome dominio","classe":"nome classe","prioridade":"alta","relacionadoA":["fator1","fator2"],"evidenciadoPor":["evidencia1","evidencia2"],"justificativaClinica":"justificativa em uma frase"}],"intervencoes":[{"nic":"nome NIC","codigo":"XXXX","diagRelacionado":"nome do diagnostico relacionado","atividades":["atividade1","atividade2","atividade3"]}],"resultados":[{"noc":"nome NOC","codigo":"XXXX","diagRelacionado":"nome do diagnostico","indicadores":["indicador1","indicador2"],"metaEsperada":"meta em uma frase"}],"evolucaoSugerida":"texto de evolucao em uma frase longa sem quebras de linha","dicaDaSupervisora":"dica pratica em uma frase"}`,
+        8000,
+        'Você é especialista em SAE de enfermagem (NANDA/NIC/NOC) com foco em UTI adulto. REGRA ABSOLUTA: responda APENAS com JSON puro e válido. Nunca use aspas duplas dentro de valores de string — use aspas simples ou reescreva. Nunca insira quebras de linha dentro de valores de string. Zero markdown. Zero texto fora do JSON. NUNCA invente valores numéricos de escalas (RASS, Braden, CPOT, CAM-ICU, Glasgow, etc.) ou exames laboratoriais que não foram fornecidos — use ____ como placeholder.'
+      );
+      if (typeof data !== 'object' || !data) throw new Error('Formato inválido. Tente novamente.');
 
-      if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
-      const data = await resp.json();
-      if (data.error) throw new Error(data.error);
-      if (typeof data.result !== 'object' || !data.result) throw new Error('Formato inválido. Tente novamente.');
-
-      setResult(data.result);
+      setResult(data as SAEResult);
     } catch(e: unknown) {
       setErr(`Erro: ${e instanceof Error ? e.message : String(e)}`);
     } finally {
@@ -177,14 +172,8 @@ export default function SAESection() {
         </div>
       </div>
 
-      {err && <div style={{ background:C.dangerGlow, border:`1px solid ${C.danger}40`, borderRadius:10, padding:16, color:C.danger, fontSize:14 }}>{err}</div>}
-      {loading && (
-        <div className="card fadeUp" style={{ textAlign:'center', padding:52 }}>
-          <div className="spinner" style={{ borderTopColor:C.accent }} />
-          <div style={{ color:C.muted, fontSize:14, marginBottom:5 }}>Analisando quadro clínico com NANDA · NIC · NOC</div>
-          <div style={{ color:C.dim, fontSize:12 }}>Cruzando sinais com taxonomias de enfermagem...</div>
-        </div>
-      )}
+      {err && <ErrorBox msg={err} />}
+      {loading && <Loader msg="Analisando quadro clínico com NANDA · NIC · NOC" subMsg="Cruzando sinais com taxonomias de enfermagem..." />}
 
       {result && (
         <div className="fadeUp" style={{ display:'flex', flexDirection:'column', gap:14 }}>

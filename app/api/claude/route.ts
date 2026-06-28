@@ -2,8 +2,13 @@ import { NextResponse } from 'next/server';
 
 export async function POST(req: Request) {
   try {
-    const { prompt, system, maxTokens = 2000 } = await req.json();
+    const { prompt, system, maxTokens } = await req.json();
 
+    if (!prompt || typeof prompt !== 'string') {
+      return NextResponse.json({ error: 'Campo "prompt" é obrigatório.' }, { status: 400 });
+    }
+
+    const safeTokens = Math.min(typeof maxTokens === 'number' ? maxTokens : 2000, 8000);
     const apiKey = process.env.GEMINI_API_KEY;
     if (!apiKey) {
       return NextResponse.json({ error: 'GEMINI_API_KEY não configurada no servidor.' }, { status: 500 });
@@ -11,7 +16,7 @@ export async function POST(req: Request) {
 
     const body: Record<string, unknown> = {
       contents: [{ role: 'user', parts: [{ text: prompt }] }],
-      generationConfig: { maxOutputTokens: maxTokens },
+      generationConfig: { maxOutputTokens: safeTokens },
     };
 
     if (system) {
@@ -24,11 +29,15 @@ export async function POST(req: Request) {
     );
 
     if (!resp.ok) {
-      const err = await resp.json();
-      return NextResponse.json(
-        { error: err.error?.message || `HTTP ${resp.status}` },
-        { status: resp.status }
-      );
+      let message = `Gemini HTTP ${resp.status}`;
+      try {
+        const err = await resp.json();
+        message = err.error?.message || message;
+      } catch {
+        // corpo não era JSON (comum em 503 da Gemini)
+      }
+      console.error('[/api/claude] Gemini error', resp.status, message);
+      return NextResponse.json({ error: message }, { status: resp.status });
     }
 
     const data = await resp.json();
