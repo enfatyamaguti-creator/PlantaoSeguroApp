@@ -43,7 +43,7 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
           alt="Plantão Seguro"
           width={160}
           height={60}
-          style={{ borderRadius: 12, objectFit: 'contain' }}
+          style={{ borderRadius: 12, objectFit: 'contain', height: 'auto' }}
           priority
         />
       </div>
