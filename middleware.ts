@@ -28,17 +28,17 @@ export async function middleware(request: NextRequest) {
 
   const { pathname } = request.nextUrl;
 
-  // Rota raiz — delega proteção ao /dashboard
-  const protectedRoute = pathname === '/' || pathname.startsWith('/dashboard');
-  const isLoginPage   = pathname === '/login';
-
-  if (!user && protectedRoute) {
+  // /dashboard/* exige autenticação
+  if (!user && pathname.startsWith('/dashboard')) {
     return NextResponse.redirect(new URL('/login', request.url));
   }
 
-  if (user && isLoginPage) {
+  // Usuário autenticado na tela de login vai direto ao dashboard
+  if (user && pathname === '/login') {
     return NextResponse.redirect(new URL('/dashboard', request.url));
   }
+
+  // / nunca redireciona — é a landing page pública
 
   return supabaseResponse;
 }
