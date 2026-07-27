@@ -6,6 +6,7 @@ const inter = Inter({ subsets: ['latin'], variable: '--font-sans' });
 const mono = IBM_Plex_Mono({ subsets: ['latin'], weight: ['400', '500'], variable: '--font-mono' });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? 'https://plantaoseguro.com.br'),
   title: 'PlantãoSeguro · Raciocínio Clínico + IA',
   description: 'Assistente clínico para técnicos de enfermagem e enfermeiros.',
 };
