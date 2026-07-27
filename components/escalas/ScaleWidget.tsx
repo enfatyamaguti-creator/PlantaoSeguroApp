@@ -15,14 +15,19 @@ export default function ScaleWidget({ scale }: ScaleWidgetProps) {
 
   if (scale.type === 'calculator' && scale.groups) {
     if (scale.groups.every(g => sel[g.key] !== undefined)) {
-      const score = scale.groups.reduce((s, g) => s + ((sel[g.key] as number) || 0), 0);
+      const score = scale.groups.reduce((s, g) => {
+        const idx = sel[g.key] as number;
+        return s + (g.options[idx]?.score ?? 0);
+      }, 0);
       const interpretFn = scale.interpret as (s: number) => { label: string; color: string };
       result = { score, interp: interpretFn(score) };
     }
   } else if (scale.type === 'single') {
     if (sel['value'] !== undefined) {
+      const idx = sel['value'] as number;
+      const score = scale.options?.[idx]?.score ?? 0;
       const interpretFn = scale.interpret as (s: number) => { label: string; color: string };
-      result = { score: sel['value'] as number, interp: interpretFn(sel['value'] as number) };
+      result = { score, interp: interpretFn(score) };
     }
   } else if (scale.type === 'checklist') {
     const interpretFn = scale.interpret as (s: Record<string, boolean>) => { label: string; color: string } | null;
@@ -38,15 +43,15 @@ export default function ScaleWidget({ scale }: ScaleWidgetProps) {
         <div key={g.key} className="card">
           <span className="section-label" style={{ color: cc }}>{g.label}</span>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-            {g.options.map(opt => (
-              <div key={opt.score} onClick={() => setSel(p => ({ ...p, [g.key]: opt.score }))} style={{
+            {g.options.map((opt, idx) => (
+              <div key={idx} onClick={() => setSel(p => ({ ...p, [g.key]: idx }))} style={{
                 padding: '10px 14px', borderRadius: 9, cursor: 'pointer', transition: 'all 0.15s',
-                border: `1px solid ${sel[g.key] === opt.score ? cc + '60' : C.border}`,
-                background: sel[g.key] === opt.score ? cc + '14' : C.surface,
+                border: `1px solid ${sel[g.key] === idx ? cc + '60' : C.border}`,
+                background: sel[g.key] === idx ? cc + '14' : C.surface,
                 display: 'flex', alignItems: 'center', justifyContent: 'space-between',
               }}>
-                <span style={{ fontSize: 13, color: sel[g.key] === opt.score ? C.text : C.muted }}>{opt.label}</span>
-                <span className="num" style={{ fontSize: 13, fontWeight: 600, color: sel[g.key] === opt.score ? cc : C.dim }}>{opt.score}</span>
+                <span style={{ fontSize: 13, color: sel[g.key] === idx ? C.text : C.muted }}>{opt.label}</span>
+                <span className="num" style={{ fontSize: 13, fontWeight: 600, color: sel[g.key] === idx ? cc : C.dim }}>{opt.score}</span>
               </div>
             ))}
           </div>
@@ -56,16 +61,16 @@ export default function ScaleWidget({ scale }: ScaleWidgetProps) {
       {scale.type === 'single' && scale.options && (
         <div className="card">
           <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-            {scale.options.map(opt => (
-              <div key={opt.score} onClick={() => setSel({ value: opt.score })} style={{
+            {scale.options.map((opt, idx) => (
+              <div key={idx} onClick={() => setSel({ value: idx })} style={{
                 padding: '11px 14px', borderRadius: 9, cursor: 'pointer', transition: 'all 0.15s',
-                border: `1px solid ${sel['value'] === opt.score ? (opt.c || cc) + '65' : C.border}`,
-                background: sel['value'] === opt.score ? (opt.c || cc) + '14' : C.surface,
+                border: `1px solid ${sel['value'] === idx ? (opt.c || cc) + '65' : C.border}`,
+                background: sel['value'] === idx ? (opt.c || cc) + '14' : C.surface,
               }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
                   <span className="num" style={{ fontSize: 14, fontWeight: 700, color: opt.c || cc, minWidth: 36, textAlign: 'center' }}>{(opt.score > 0) ? '+' : ''}{opt.score}</span>
                   <div>
-                    <div style={{ fontSize: 13, fontWeight: 600, color: sel['value'] === opt.score ? C.text : C.muted }}>{opt.label}</div>
+                    <div style={{ fontSize: 13, fontWeight: 600, color: sel['value'] === idx ? C.text : C.muted }}>{opt.label}</div>
                     {opt.desc && <div style={{ fontSize: 11.5, color: C.muted, marginTop: 2 }}>{opt.desc}</div>}
                   </div>
                 </div>
@@ -126,7 +131,7 @@ export default function ScaleWidget({ scale }: ScaleWidgetProps) {
       <div style={{ background:`linear-gradient(135deg,${C.card},${C.goldGlow})`, border:`1px solid ${C.gold}35`, borderRadius:14, padding:'16px 22px' }}>
         <div style={{ fontSize:11, color:C.gold, fontWeight:700, textTransform:'uppercase', letterSpacing:1, marginBottom:8 }}>⭐ Dica da supervisora</div>
         <p style={{ fontSize:13.5, color:C.text, lineHeight:1.75, fontStyle:'italic' }}>&ldquo;{scale.dica}&rdquo;</p>
-        <div style={{ fontSize:11, color:C.muted, marginTop:8 }}>— Andreia Yamaguti · Supervisora UTI</div>
+        <div style={{ fontSize:11, color:C.muted, marginTop:8 }}>— Equipe PlantãoSeguro</div>
       </div>
     </div>
   );

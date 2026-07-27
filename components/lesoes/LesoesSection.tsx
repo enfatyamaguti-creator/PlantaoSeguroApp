@@ -140,7 +140,7 @@ export default function LesoesSection() {
               }}>
                 <div style={{ fontSize: 11, color: C.gold, fontWeight: 700, textTransform: 'uppercase', letterSpacing: 1, marginBottom: 9 }}>⭐ Dica da supervisora</div>
                 <p style={{ fontSize: 14, color: C.text, lineHeight: 1.75, fontStyle: 'italic' }}>&ldquo;{wound.dica}&rdquo;</p>
-                <div style={{ fontSize: 11.5, color: C.muted, marginTop: 9 }}>— Andreia Yamaguti · Supervisora UTI · Especialista em LPP e Feridas</div>
+                <div style={{ fontSize: 11.5, color: C.muted, marginTop: 9 }}>— Equipe PlantãoSeguro</div>
               </div>
             </div>
           ) : (

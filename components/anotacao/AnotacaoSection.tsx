@@ -236,7 +236,7 @@ export default function AnotacaoSection() {
               <p style={{ fontSize:13.5, color:C.text, lineHeight:1.7, fontStyle:'italic' }}>
                 &ldquo;Anotação de enfermagem é documento legal. Seja objetivo, use linguagem técnica e nunca deixe rasuras. Se errar no papel: uma linha sobre o erro, &lsquo;erro de escrita&rsquo;, data, hora e assinatura. Em sistema eletrônico: use o recurso de correção previsto pelo sistema. Datas e horários precisos são obrigatórios.&rdquo;
               </p>
-              <div style={{ fontSize:11, color:C.muted, marginTop:8 }}>— Andreia Yamaguti · Supervisora UTI</div>
+              <div style={{ fontSize:11, color:C.muted, marginTop:8 }}>— Equipe PlantãoSeguro</div>
             </div>
           )}
         </>
