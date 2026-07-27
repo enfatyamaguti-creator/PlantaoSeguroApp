@@ -312,7 +312,7 @@ export default function SAESection() {
           <div style={{ background:`linear-gradient(135deg,${C.card},${C.goldGlow})`, border:`1px solid ${C.gold}35`, borderRadius:14, padding:'18px 22px' }}>
             <div style={{ fontSize:11, color:C.gold, fontWeight:700, textTransform:'uppercase', letterSpacing:1, marginBottom:9 }}>⭐ Dica da supervisora</div>
             <p style={{ fontSize:14, color:C.text, lineHeight:1.75, fontStyle:'italic' }}>&ldquo;{result.dicaDaSupervisora}&rdquo;</p>
-            <div style={{ fontSize:11.5, color:C.muted, marginTop:9 }}>— Andreia Yamaguti · Supervisora UTI</div>
+            <div style={{ fontSize:11.5, color:C.muted, marginTop:9 }}>— Equipe PlantãoSeguro</div>
           </div>
         </div>
       )}
