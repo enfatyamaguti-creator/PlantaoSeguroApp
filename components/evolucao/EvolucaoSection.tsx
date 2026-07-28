@@ -37,7 +37,7 @@ ${extra ? `Dados adicionais: ${extra}` : ''}
 
 IMPORTANTE: Para qualquer valor numérico (sinais vitais, escalas, exames) não informado acima, escreva ____ no texto para o enfermeiro preencher.`,
         2000,
-        'Você é enfermeira supervisora de UTI. Gere evoluções de enfermagem profissionais, técnicas e objetivas. REGRA ABSOLUTA: nunca invente ou estime valores numéricos (PA, FC, FR, SpO2, temperatura, glicemia, escalas, etc.) que não foram fornecidos. Quando um dado não foi informado, use ____ como placeholder para o enfermeiro preencher.'
+        'Você é um especialista em enfermagem clínica de UTI. Gere evoluções de enfermagem profissionais, técnicas e objetivas. REGRA ABSOLUTA: nunca invente ou estime valores numéricos (PA, FC, FR, SpO2, temperatura, glicemia, escalas, etc.) que não foram fornecidos. Quando um dado não foi informado, use ____ como placeholder para o enfermeiro preencher.'
       );
       setResult(typeof text === 'string' ? text : '');
     } catch (e: unknown) { setErr(`Erro: ${e instanceof Error ? e.message : String(e)}`); }

@@ -338,7 +338,7 @@ export default function LandingPage() {
       </section>
 
       {/* ─── AUTORIDADE ────────────────────────────────────── */}
-      <section style={{ background: SURFACE, padding: 'clamp(64px,9vw,100px) 24px' }}>
+      {/* <section style={{ background: SURFACE, padding: 'clamp(64px,9vw,100px) 24px' }}>
         <div style={{ maxWidth: 860, margin: '0 auto', textAlign: 'center' }}>
           <p style={{ fontSize: 11.5, fontWeight: 700, color: TEAL, textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 14 }}>
             Quem está por trás
@@ -352,7 +352,6 @@ export default function LandingPage() {
             border: `1px solid rgba(201,168,76,0.25)`,
             borderRadius: 22, padding: 'clamp(28px,5vw,44px) clamp(24px,5vw,44px)',
           }}>
-            {/* Foto placeholder */}
             <div style={{
               width: 88, height: 88, borderRadius: '50%', margin: '0 auto 20px',
               background: `${NAVY}12`, border: `2px solid ${GOLD}40`,
@@ -389,10 +388,10 @@ export default function LandingPage() {
             </div>
           </div>
         </div>
-      </section>
+      </section> */}
 
       {/* ─── DEPOIMENTOS ───────────────────────────────────── */}
-      <section style={{ background: BG, padding: 'clamp(64px,9vw,100px) 24px' }}>
+      {/* <section style={{ background: BG, padding: 'clamp(64px,9vw,100px) 24px' }}>
         <div style={{ maxWidth: 1060, margin: '0 auto' }}>
           <div style={{ textAlign: 'center', marginBottom: 50 }}>
             <p style={{ fontSize: 11.5, fontWeight: 700, color: TEAL, textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 14 }}>
@@ -431,7 +430,7 @@ export default function LandingPage() {
             ))}
           </div>
         </div>
-      </section>
+      </section> */}
 
       {/* ─── PREÇO ─────────────────────────────────────────── */}
       <section id="planos" style={{ background: SURFACE, padding: 'clamp(64px,9vw,104px) 24px' }}>
@@ -628,10 +627,9 @@ export default function LandingPage() {
                   <a href="/login" style={{ color: 'rgba(255,255,255,0.4)', textDecoration: 'none' }}>Entrar</a>
                 </div>
               </div>
-              <div>
+              {/* <div>
                 <div style={{ fontSize: 10.5, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'rgba(255,255,255,0.55)', marginBottom: 14 }}>Legal</div>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 10, fontSize: 13 }}>
-                  {/* [INSERIR LINKS REAIS quando as páginas forem criadas] */}
                   <a href="#" style={{ color: 'rgba(255,255,255,0.4)', textDecoration: 'none' }}>Política de Privacidade</a>
                   <a href="#" style={{ color: 'rgba(255,255,255,0.4)', textDecoration: 'none' }}>Termos de Uso</a>
                 </div>
@@ -642,12 +640,12 @@ export default function LandingPage() {
                   <a href="mailto:[INSERIR EMAIL]" style={{ color: 'rgba(255,255,255,0.4)', textDecoration: 'none' }}>[INSERIR EMAIL]</a>
                   <a href="https://wa.me/[NUMERO]" style={{ color: 'rgba(255,255,255,0.4)', textDecoration: 'none' }}>WhatsApp</a>
                 </div>
-              </div>
+              </div> */}
             </div>
           </div>
           <div style={{ borderTop: '1px solid rgba(255,255,255,0.08)', paddingTop: 24, display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', gap: 12, fontSize: 12 }}>
             <span>© {new Date().getFullYear()} PlantãoSeguro. Todos os direitos reservados.</span>
-            <span>[INSERIR CNPJ] · [INSERIR RAZÃO SOCIAL]</span>
+            {/* <span>[INSERIR CNPJ] · [INSERIR RAZÃO SOCIAL]</span> */}
           </div>
         </div>
       </footer>
