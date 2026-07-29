@@ -35,8 +35,6 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
     return pathname.startsWith(href);
   }
 
-  const AI_IDS = new Set(['evolucao', 'anotacao', 'exames', 'plantao', 'sae']);
-
   return (
     <aside
       className={`sidebar${isOpen ? ' sidebar-open' : ''}`}
@@ -59,7 +57,7 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
           alt="Plantão Seguro"
           width={160}
           height={60}
-          style={{ borderRadius: 12, objectFit: 'contain', height: 'auto' }}
+          style={{ borderRadius: 12, objectFit: 'contain', height: 'auto',width:'200px' }}
           priority
         />
       </div>
@@ -69,21 +67,17 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
         flex: 1, marginTop: 10, padding: '0 10px',
         display: 'flex', flexDirection: 'column', gap: 2, overflowY: 'auto',
       }}>
-        {NAV.map(n => {
-          const isAI = AI_IDS.has(n.id);
-          return (
-            <Link key={n.id} href={n.href} style={{ textDecoration: 'none' }} onClick={onClose}>
-              <div className={`nav-item${isActive(n.href) ? ' active' : ''}`}>
-                <span style={{ fontSize: 14, opacity: isAI ? 0.4 : isActive(n.href) ? 1 : 0.7, filter: isAI ? 'grayscale(1)' : 'none' }}>{n.icon}</span>
-                <span style={{ textDecoration: isAI ? 'line-through' : 'none', opacity: isAI ? 0.5 : 1 }}>{n.label}</span>
-                {isAI && <span style={{ marginLeft: 4, fontSize: 12 }}>🚧</span>}
-                {isActive(n.href) && !isAI && (
-                  <div style={{ marginLeft: 'auto', width: 4, height: 4, borderRadius: '50%', background: C.accent }} />
-                )}
-              </div>
-            </Link>
-          );
-        })}
+        {NAV.map(n => (
+          <Link key={n.id} href={n.href} style={{ textDecoration: 'none' }} onClick={onClose}>
+            <div className={`nav-item${isActive(n.href) ? ' active' : ''}`}>
+              <span style={{ fontSize: 14, opacity: isActive(n.href) ? 1 : 0.7 }}>{n.icon}</span>
+              <span>{n.label}</span>
+              {isActive(n.href) && (
+                <div style={{ marginLeft: 'auto', width: 4, height: 4, borderRadius: '50%', background: C.accent }} />
+              )}
+            </div>
+          </Link>
+        ))}
       </nav>
 
       {/* User footer */}

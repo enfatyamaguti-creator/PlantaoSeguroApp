@@ -129,7 +129,7 @@ export default function ScaleWidget({ scale }: ScaleWidgetProps) {
       )}
 
       <div style={{ background:`linear-gradient(135deg,${C.card},${C.goldGlow})`, border:`1px solid ${C.gold}35`, borderRadius:14, padding:'16px 22px' }}>
-        <div style={{ fontSize:11, color:C.gold, fontWeight:700, textTransform:'uppercase', letterSpacing:1, marginBottom:8 }}>⭐ Dica da supervisora</div>
+        <div style={{ fontSize:11, color:C.gold, fontWeight:700, textTransform:'uppercase', letterSpacing:1, marginBottom:8 }}>⭐ Dica da Equipe PlantãoSeguro</div>
         <p style={{ fontSize:13.5, color:C.text, lineHeight:1.75, fontStyle:'italic' }}>&ldquo;{scale.dica}&rdquo;</p>
         <div style={{ fontSize:11, color:C.muted, marginTop:8 }}>— Equipe PlantãoSeguro</div>
       </div>

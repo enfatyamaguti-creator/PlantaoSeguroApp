@@ -44,7 +44,7 @@ export default function AnotacaoSection() {
       const text = await callAI(
         `Gere uma anotação de enfermagem profissional.\n\nTipo: ${tipoSel?.label}\nSetor: ${setor}\nTurno: ${turno || 'não informado'}\n${paciente ? `Identificação: ${paciente}${leito ? `, Leito ${leito}` : ''}` : ''}\n${camposTexto}\n${contexto ? `Contexto adicional: ${contexto}` : ''}\n\nRequisitos:\n- Linguagem técnica de enfermagem hospitalar\n- 3ª pessoa do singular (ex: "Paciente apresentou...", "Realizado...", "Comunicado ao...")\n- Máximo 120 palavras\n- Texto corrido, sem tópicos ou bullets\n- Incluir horário se relevante (usar __HORÁRIO__ como placeholder)\n- Para qualquer valor numérico não informado (sinais vitais, escalas, exames), usar ____ para o enfermeiro preencher\n- Finalizar com assinatura padrão: "Enfermeiro(a) responsável."\n- Seguir normas COFEN de documentação`,
         2000,
-        'Você é enfermeira supervisora de UTI com vasta experiência em documentação de enfermagem. Gere anotações de enfermagem profissionais, objetivas, em linguagem técnica, em 3ª pessoa do singular, sem bullet points, texto corrido. Siga as normas do COFEN. REGRA ABSOLUTA: nunca invente valores numéricos (PA, FC, FR, SpO2, temperatura, glicemia, escalas) que não foram fornecidos — use ____ como placeholder.'
+        'Você é um especialista em enfermagem clínica de UTI com vasta experiência em documentação hospitalar. Gere anotações de enfermagem profissionais, objetivas, em linguagem técnica, em 3ª pessoa do singular, sem bullet points, texto corrido. Siga as normas do COFEN. REGRA ABSOLUTA: nunca invente valores numéricos (PA, FC, FR, SpO2, temperatura, glicemia, escalas) que não foram fornecidos — use ____ como placeholder.'
       );
       const str = typeof text === 'string' ? text : '';
       setResult(str);
@@ -232,7 +232,7 @@ export default function AnotacaoSection() {
 
           {result && !loading && (
             <div className="fadeUp" style={{ background:`linear-gradient(135deg,#fff,${C.goldGlow})`, border:`1px solid ${C.gold}35`, borderRadius:12, padding:'16px 20px' }}>
-              <div style={{ fontSize:10.5, color:C.gold, fontWeight:700, textTransform:'uppercase', letterSpacing:1, marginBottom:8 }}>⭐ Dica da supervisora</div>
+              <div style={{ fontSize:10.5, color:C.gold, fontWeight:700, textTransform:'uppercase', letterSpacing:1, marginBottom:8 }}>⭐ Dica da Equipe PlantãoSeguro</div>
               <p style={{ fontSize:13.5, color:C.text, lineHeight:1.7, fontStyle:'italic' }}>
                 &ldquo;Anotação de enfermagem é documento legal. Seja objetivo, use linguagem técnica e nunca deixe rasuras. Se errar no papel: uma linha sobre o erro, &lsquo;erro de escrita&rsquo;, data, hora e assinatura. Em sistema eletrônico: use o recurso de correção previsto pelo sistema. Datas e horários precisos são obrigatórios.&rdquo;
               </p>

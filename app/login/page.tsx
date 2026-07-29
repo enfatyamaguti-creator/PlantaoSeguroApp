@@ -2,6 +2,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
+import Link from 'next/link';
 import { Eye, EyeOff } from 'lucide-react';
 import { C } from '@/lib/constants/colors';
 import { createClient } from '@/lib/supabase/client';
@@ -100,7 +101,12 @@ export default function LoginPage() {
 
           {/* Senha */}
           <div>
-            <span className="label">Senha</span>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: 8 }}>
+              <span className="label" style={{ marginBottom: 0 }}>Senha</span>
+              <Link href="/esqueci-senha" style={{ fontSize: 12, color: C.accent, textDecoration: 'none', fontWeight: 600 }}>
+                Esqueci minha senha
+              </Link>
+            </div>
             <div style={{ position: 'relative' }}>
               <input
                 type={showPass ? 'text' : 'password'}
