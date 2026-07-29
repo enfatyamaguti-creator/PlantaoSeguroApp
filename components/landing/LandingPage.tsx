@@ -134,7 +134,7 @@ export default function LandingPage() {
         transition: 'transform 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
       }}>
         <div style={{ maxWidth: 1100, margin: '0 auto', padding: '0 24px', height: 62, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-          <Image src="/logoHorizontal.png" alt="PlantãoSeguro" width={140} height={42} style={{ objectFit: 'contain', height: 'auto', borderRadius: 8 }} priority />
+          <Image src="/logoHorizontal.png" alt="PlantãoSeguro" width={140} height={42} style={{ objectFit: 'contain', width: '170px', height: 'auto', borderRadius: 8 }} priority />
           <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
             <a href="/login" className="lp-nav-link" style={{ fontSize: 13.5, color: 'rgba(255,255,255,0.6)', textDecoration: 'none', fontWeight: 500 }}>
               Entrar
@@ -623,7 +623,7 @@ export default function LandingPage() {
                 <div style={{ fontSize: 10.5, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'rgba(255,255,255,0.55)', marginBottom: 14 }}>Produto</div>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 10, fontSize: 13 }}>
                   <a href="#planos" style={{ color: 'rgba(255,255,255,0.4)', textDecoration: 'none' }}>Planos</a>
-                  <a href={KM} style={{ color: 'rgba(255,255,255,0.4)', textDecoration: 'none' }}>Assinar</a>
+                  {/* <a href="#" style={{ color: 'rgba(255,255,255,0.4)', textDecoration: 'none' }}>Assinar</a> */}
                   <a href="/login" style={{ color: 'rgba(255,255,255,0.4)', textDecoration: 'none' }}>Entrar</a>
                 </div>
               </div>
