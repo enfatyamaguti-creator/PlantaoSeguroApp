@@ -1,13 +1,13 @@
 'use client';
 
-import { useState } from 'react';
+import { Suspense, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { C } from '@/lib/constants/colors';
 import { createClient } from '@/lib/supabase/client';
 
-export default function EsqueciSenhaPage() {
+function EsqueciSenhaContent() {
   const searchParams = useSearchParams();
   const linkExpirado = searchParams.get('erro') === 'link_expirado';
 
@@ -129,5 +129,13 @@ export default function EsqueciSenhaPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function EsqueciSenhaPage() {
+  return (
+    <Suspense>
+      <EsqueciSenhaContent />
+    </Suspense>
   );
 }
