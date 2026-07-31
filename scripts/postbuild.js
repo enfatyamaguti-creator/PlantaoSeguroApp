@@ -1,43 +1,39 @@
 /**
- * Copia .next/static para _next/static na raiz do projeto.
+ * Prepara o output standalone do Next.js para deploy no Hostinger.
  *
- * O LiteSpeed da Hostinger tenta servir /_next/static/ como arquivo estático
- * buscando a pasta `_next/` no diretório raiz. O Next.js gera os assets em
- * `.next/static/` (pasta oculta com ponto). Como o LiteSpeed não segue
- * symlinks de forma confiável, copiamos os arquivos para `_next/static/`
- * diretamente, garantindo que o LiteSpeed os encontre.
+ * O `output: 'standalone'` gera um servidor em .next/standalone/ que
+ * serve tudo — incluindo /_next/static/ — sem depender do LiteSpeed.
+ * Mas o standalone não inclui os arquivos estáticos por padrão;
+ * precisamos copiá-los manualmente para dentro da pasta standalone.
  */
 const fs   = require('fs');
 const path = require('path');
 
-const root = process.cwd();
-const src  = path.join(root, '.next', 'static');
-const dst  = path.join(root, '_next', 'static');
+const root       = process.cwd();
+const standalone = path.join(root, '.next', 'standalone');
 
-try {
-  if (!fs.existsSync(src)) {
-    console.error('[postbuild] .next/static não encontrado — o build falhou?');
-    process.exit(0);
-  }
-
-  if (fs.existsSync(path.join(root, '_next'))) {
-    fs.rmSync(path.join(root, '_next'), { recursive: true, force: true });
-  }
-
-  fs.cpSync(src, dst, { recursive: true });
-
-  const count = countFiles(dst);
-  console.log(`[postbuild] ✓ ${count} arquivos copiados para _next/static/ (Hostinger LiteSpeed fix)`);
-} catch (err) {
-  console.error('[postbuild] Erro ao copiar arquivos estáticos:', err.message);
+if (!fs.existsSync(standalone)) {
+  console.error('[postbuild] .next/standalone não encontrado. Verifique se output: "standalone" está no next.config.mjs e o build concluiu.');
   process.exit(1);
 }
 
-function countFiles(dir) {
-  let total = 0;
-  for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
-    if (entry.isDirectory()) total += countFiles(path.join(dir, entry.name));
-    else total++;
-  }
-  return total;
+// 1. Copia .next/static → .next/standalone/.next/static
+copy(
+  path.join(root, '.next', 'static'),
+  path.join(standalone, '.next', 'static')
+);
+
+// 2. Copia public/ → .next/standalone/public/
+const publicDir = path.join(root, 'public');
+if (fs.existsSync(publicDir)) {
+  copy(publicDir, path.join(standalone, 'public'));
+}
+
+console.log('[postbuild] ✓ Standalone pronto para deploy');
+
+function copy(src, dst) {
+  if (!fs.existsSync(src)) return;
+  if (fs.existsSync(dst)) fs.rmSync(dst, { recursive: true, force: true });
+  fs.cpSync(src, dst, { recursive: true });
+  console.log(`[postbuild]   ${path.relative(root, src)} → ${path.relative(root, dst)}`);
 }
