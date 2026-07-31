@@ -1,5 +1,10 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  experimental: {
+    // Limita workers do build para não estourar o limite de processos do Hostinger (120)
+    cpus: 2,
+  },
+
   async headers() {
     return [
       {
