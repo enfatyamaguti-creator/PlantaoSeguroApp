@@ -29,6 +29,14 @@ if (fs.existsSync(publicDir)) {
   copy(publicDir, path.join(standalone, 'public'));
 }
 
+// 3. Copia .next/static → _next/static (sem ponto, na raiz do projeto)
+// O LiteSpeed do Hostinger tenta servir /_next/static/ como arquivo estático,
+// buscando em _next/static/ na raiz — sem ponto. Sem essa cópia, retorna 404.
+copy(
+  path.join(root, '.next', 'static'),
+  path.join(root, '_next', 'static')
+);
+
 console.log('[postbuild] ✓ Standalone pronto para deploy');
 
 function copy(src, dst) {
