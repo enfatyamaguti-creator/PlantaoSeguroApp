@@ -14,6 +14,9 @@
 /_next
 /out/
 
+# standalone build (gerado pelo postbuild)
+/standalone/
+
 # production
 /build
 
