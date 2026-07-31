@@ -11,11 +11,7 @@
 
 # next.js
 /.next/
-/_next
 /out/
-
-# standalone build (gerado pelo postbuild)
-/standalone/
 
 # production
 /build
