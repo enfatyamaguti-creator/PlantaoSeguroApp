@@ -16,9 +16,9 @@ const MUTED     = '#718096';
 const BORDER    = '#E2E8F0';
 const OK        = '#276749';
 
-const PM  = process.env.NEXT_PUBLIC_PRICE_MONTHLY        ?? '9,99';
-const PA  = process.env.NEXT_PUBLIC_PRICE_ANNUAL         ?? '100,00';
-const PAM = process.env.NEXT_PUBLIC_PRICE_ANNUAL_MONTHLY ?? '8,33';
+const PM  = process.env.NEXT_PUBLIC_PRICE_MONTHLY        ?? '-';
+const PA  = process.env.NEXT_PUBLIC_PRICE_ANNUAL         ?? '-';
+const PAM = process.env.NEXT_PUBLIC_PRICE_ANNUAL_MONTHLY ?? '-';
 const KM  = process.env.NEXT_PUBLIC_KIWIFY_URL_MONTHLY   ?? '#planos';
 const KA  = process.env.NEXT_PUBLIC_KIWIFY_URL_ANNUAL    ?? '#planos';
 
